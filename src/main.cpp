@@ -23,6 +23,8 @@ void interpret(string content) {
     unsigned int scope = 0;
     unsigned int loopcount;
     unsigned int loopstartpos;
+    int copy_value;
+    bool copy = false;
 
     for(int i = 0; i < content.size(); i++) {
         if (sizefound) {
@@ -118,7 +120,18 @@ void interpret(string content) {
                     for(int e = 0; e < data_size; e++) {
                         dat[e][scope+1] = 0;
                     }
-            }
+                    break;
+                case '|':
+                // copy paste
+                    if(copy) {
+                        dat[pointer][scope] = copy_value;
+                        copy = false;
+                    } else {
+                        copy_value = dat[pointer][scope];
+                        copy = true;
+                    }
+                    break;
+                }
         }
     }
     delete[] dat;
