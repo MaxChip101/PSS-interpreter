@@ -3,3 +3,6 @@
 
 # vs-code
 *.vscode
+
+# builds
+bin/
