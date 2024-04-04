@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 
     #ifdef __linux__
         char cwd[1024];
-        
+
         string argument = argv[1];
         string tmpcwd = getcwd(cwd, sizeof(cwd));
         string fullcwd = tmpcwd + "/" + argument;
@@ -146,9 +146,23 @@ int main(int argc, char **argv)
         getline(pssfile, content);
 
     #elif _WIN32
-        cout << "Using windows" << endl;
+        string argument = argv[1];
+        
+        // Get current working directory
         char buffer[MAX_PATH];
         GetCurrentDirectoryA(MAX_PATH, buffer);
+        string cwd(buffer);
+        
+        string fullcwd = cwd + "\\" + argument;
+
+        // Open file
+        ifstream pssfile(fullcwd.c_str());
+        if (!pssfile.is_open()) {
+            cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
+            return 1;
+        }
+
+        getline(pssfile, content);
     #else
         cout << "Not certain of platform" << endl;
         return(1);
