@@ -38,12 +38,12 @@ void interpret(string content) {
                 // get scope size
                 sizefound = false;
                 scope_size = stoi(temp);
-                dat = new int*[data_size];
-                for (int row = 0; row < data_size; ++row) {
-                    dat[row] = new int[scope_size];
+                dat = new int*[scope_size];
+                for (int row = 0; row < scope_size; ++row) {
+                    dat[row] = new int[data_size];
                 }
-                for (int row = 0; row < data_size; ++row) {
-                    for (int col = 0; col < scope_size; ++col) {
+                for (int row = 0; row < scope_size; ++row) {
+                    for (int col = 0; col < data_size; ++col) {
                         dat[row][col] = 0;
                     }
                 }
@@ -54,9 +54,9 @@ void interpret(string content) {
                 case '.':
                 // print
                     if(content[i-1] == 'c') {
-                        cout << char(dat[pointer][scope]);
+                        cout << char(dat[scope][pointer]);
                     } else {
-                        cout << dat[pointer][scope];
+                        cout << dat[scope][pointer];
                     }
                     break;
                 case ',':
@@ -64,11 +64,11 @@ void interpret(string content) {
                     if(content[i-1] == 'c') {
                         char c;
                         cin >> c;
-                        dat[pointer][scope] = int(c);
+                        dat[scope][pointer] = int(c);
                     } else {
                         int n;
                         cin >> n;
-                        dat[pointer][scope] = int(n);
+                        dat[scope][pointer] = int(n);
                     }
                         break;
                 case '<':
@@ -85,16 +85,16 @@ void interpret(string content) {
                     break;
                 case '+':
                 // increase cell
-                    dat[pointer][scope]++;
+                    dat[scope][pointer]++;
                     break;
                 case '-':
                 // decrease cell
-                    dat[pointer][scope]--;
+                    dat[scope][pointer]--;
                     break;
                 case '[':
                 // begin loop
                     loopstartpos = i+1;
-                    loopcount = dat[pointer][scope];
+                    loopcount = dat[scope][pointer];
                     break;
                 case ']':
                 // end loop
@@ -105,29 +105,25 @@ void interpret(string content) {
                     break;
                 case '~':
                 // get pointer position
-                    dat[pointer][scope] = pointer;
+                    dat[scope][pointer] = pointer;
                     break;
                 case '(':
                 // begin scope
                     scope++;
-                    for(int e = 0; e < data_size; e++) {
-                        dat[e][scope] = dat[e][scope-1];
-                    }
+                    dat[scope] = dat[scope-1];
                     break;
                 case ')':
                 // end scope
                     scope--;
-                    for(int e = 0; e < data_size; e++) {
-                        dat[e][scope+1] = 0;
-                    }
+                    dat[scope+1] = nullptr;
                     break;
                 case '|':
                 // copy paste
                     if(copy) {
-                        dat[pointer][scope] = copy_value;
+                        dat[scope][pointer] = copy_value;
                         copy = false;
                     } else {
-                        copy_value = dat[pointer][scope];
+                        copy_value = dat[scope][pointer];
                         copy = true;
                     }
                     break;
