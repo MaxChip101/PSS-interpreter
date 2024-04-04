@@ -51,7 +51,7 @@ The structure of the code is pretty simple. How you strucure the code is depende
 
 ### +
 The `+` command adds 1 to the memory adress that the pointer is at. For example to have an array position with the value 3 you would do `1'1:+++`. This would add 1 three times to the pointer position of the array and make it equal to 3. The pseudo code equivelent to this would be:
-```pseudo
+```c
 int memory[1][1]; // initialize
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
@@ -62,7 +62,7 @@ memory[0][0]+=1; // +
 
 ### -
 Similarly, the `-` command subtracts 1 from a memory adress that the pointer is at. For example you have a array position with the value of 2 and you subract 2 to make it equal to 0: `1'1:++--`. This would add 2 to the array but after would subract 1 two times, making it equal to 0. The pseudo code equivelent to this would be:
-```
+```c
 int memory[1][1]; // initialize
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
