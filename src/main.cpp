@@ -1,6 +1,17 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+
+#ifdef __linux__
+    #include <unistd.h>
+#elif _WIN32
+    #include <windows.h>
+#endif
+
+
 using namespace std;
+
+string script;
 
 void interpret(string content) {
     unsigned int data_size;
@@ -115,9 +126,34 @@ void interpret(string content) {
 
 
 
-int main() {
+int main(int argc, char **argv) 
+{
     string content;
-    cin >> content;
+
+    #ifdef __linux__
+        char cwd[1024];
+        
+        string argument = argv[1];
+        string tmpcwd = getcwd(cwd, sizeof(cwd));
+        string fullcwd = tmpcwd + "/" + argument;
+
+        ifstream pssfile(fullcwd.c_str());
+        if (!pssfile.is_open()) {
+            cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
+            return 1;
+        }
+
+        getline(pssfile, content);
+
+    #elif _WIN32
+        cout << "Using windows" << endl;
+        char buffer[MAX_PATH];
+        GetCurrentDirectoryA(MAX_PATH, buffer);
+    #else
+        cout << "Not certain of platform" << endl;
+        return(1);
+    #endif
+
     interpret(content);
     return 0;
 }

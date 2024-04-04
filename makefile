@@ -14,9 +14,9 @@ OBJS = $(SRCS:.cpp=.o)
 TARGET = pss
 
 # Default target
-all: $(TARGET)
+all:
 	mkdir -p ./bin
-	$(CXX) $(CXXFLAGS) $(SRCS) -o ./bin/$(TARGET)
+	$(CXX) $(SRCS) -o ./bin/$(TARGET)
 
 # Clean command to remove generated files
 clean:
