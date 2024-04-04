@@ -15,7 +15,7 @@ string script;
 
 void interpret(string content) {
     unsigned int data_size;
-    unsigned int scope_size = 2;
+    unsigned int scope_size = 0;
     string temp;
     bool sizefound = true;
     int **dat = nullptr;
@@ -84,11 +84,11 @@ void interpret(string content) {
                     }
                     break;
                 case '+':
-                // increase cell
+                // increase value
                     dat[scope][pointer]++;
                     break;
                 case '-':
-                // decrease cell
+                // decrease value
                     dat[scope][pointer]--;
                     break;
                 case '[':
