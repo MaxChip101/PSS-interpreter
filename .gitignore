@@ -1,0 +1,5 @@
+# executables
+*.exe
+
+# vs-code
+*.vscode
