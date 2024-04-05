@@ -127,7 +127,19 @@ void interpret(string content) {
                         copy = true;
                     }
                     break;
-                }
+                case '@':
+                // go to position
+                    pointer = dat[scope][pointer];
+                    break;
+                case '*':
+                // equal zero
+                    dat[scope][pointer] = 0;
+                    break;
+                case '!':
+                // invert value
+                    dat[scope][pointer] = -dat[scope][pointer];
+                    break;
+            }
         }
     }
     delete[] dat;
