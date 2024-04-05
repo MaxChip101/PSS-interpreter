@@ -15,7 +15,7 @@ string script;
 
 void interpret(string content) {
     unsigned int data_size;
-    unsigned int scope_size = 0;
+    unsigned int scope_size = 2;
     string temp;
     bool sizefound = true;
     int **dat = nullptr;
@@ -64,11 +64,11 @@ void interpret(string content) {
                     if(content[i-1] == 'c') {
                         char c;
                         cin >> c;
-                        dat[scope][pointer] = int(c);
+                        dat[scope][pointer] = c;
                     } else {
                         int n;
                         cin >> n;
-                        dat[scope][pointer] = int(n);
+                        dat[scope][pointer] = n;
                     }
                         break;
                 case '<':
@@ -93,8 +93,8 @@ void interpret(string content) {
                     break;
                 case '[':
                 // begin loop
-                    loopstartpos = i+1;
-                    loopcount = dat[scope][pointer];
+                    loopstartpos = i;
+                    loopcount = dat[scope][pointer]-1;
                     break;
                 case ']':
                 // end loop
@@ -103,7 +103,7 @@ void interpret(string content) {
                         loopcount--;
                     }
                     break;
-                case '~':
+                case '@':
                 // get pointer position
                     dat[scope][pointer] = pointer;
                     break;
@@ -114,8 +114,10 @@ void interpret(string content) {
                     break;
                 case ')':
                 // end scope
-                    scope--;
-                    dat[scope+1] = nullptr;
+                    if(scope > 0) { 
+                        scope--;
+                        dat[scope+1] = nullptr;
+                    }
                     break;
                 case '|':
                 // copy paste
@@ -127,17 +129,9 @@ void interpret(string content) {
                         copy = true;
                     }
                     break;
-                case '@':
+                case '~':
                 // go to position
                     pointer = dat[scope][pointer];
-                    break;
-                case '*':
-                // equal zero
-                    dat[scope][pointer] = 0;
-                    break;
-                case '!':
-                // invert value
-                    dat[scope][pointer] = -dat[scope][pointer];
                     break;
             }
         }
