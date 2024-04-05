@@ -87,15 +87,16 @@ memory[0][pointer]-=1; // -
 The `[` command starts a loop at the character position and it would loop back the value of the pointer that was there before the loop began. The `]` command would tell the interpreter to loop back to the position of the beginning of the loop and would subract 1 from the loop count. For example: `1'1:+++[+++]`. This would add 3 to position 0 and would loop 3 times adding 3 to position 0. Here is the code in pseudo code:
 ```c
 int memory[1][1]; // initialize
-int loop_count;
+int loop_count; // initialize
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
 loop_count = memory[0][0]; // [
-while(loop_count != 0) { // []
+while(loop_count != 0) { // [
     memory[0][0]+=1; // +
     memory[0][0]+=1; // +
     memory[0][0]+=1; // +
+    loop_count--; // ]
 } // ]
 ```
 
@@ -105,7 +106,7 @@ while(loop_count != 0) { // []
 The `(` command would start a scope which would copy every single element from the previous scope into the new one and would put the pointer in the new scope. Anything that you change in the scope will not affect anything outside of it. The `)` command would end a scope which would delete everything in the new scope and put the pointer in the previous scope. Here is an example: `1'2:+++(++)`. This code will add 3 to position 0 then create a new scope, then in the new scope, add 2, then the scope ends. This in the end will equal 3 because the 2 added to the new scope did not affect the previous scope. Here is pseudo code for it:
 ```c
 int memory[2][1]; // initialize
-int scope = 0;
+int scope = 0; // initialize
 memory[scope][0]+=1; // +
 memory[scope][0]+=1; // +
 memory[scope][0]+=1; // +
@@ -123,8 +124,8 @@ memory[scope+1] = null; // )
 The `|` command would get the value of the pointer position on the memory array and would copy it then anything in between the 2 `|` would act as directions to tell the interpreter where to paste the value. Here is an example: `3'1:+++|>>|`. This code would add 3 to position 0 and would copy it and paste it to the position 2. Here is pseudo code of how it works:
 ```c
 int memory[1][3]; // initialize
-int pointer=0;
-int copy_value;
+int pointer=0; // initialize
+int copy_value; // initialize
 memory[0][pointer]+=1; // +
 memory[0][pointer]+=1; // +
 memory[0][pointer]+=1; // +
@@ -133,4 +134,46 @@ pointer++; // >
 pointer++; // >
 memory[0][pointer] = copy_value; // |
 ```
+
+---
+
+### Pointer Setting
+The `@` command sets the value of the pointer to the pointer position. The `~` command sets the position of the pointer to the value of the pointer. For example: `3'1:>>@|<<|~`. What is happening in this script is that the pointer goes right by 2 positions, and gets the pointer position and then copies it back 2 positions and then the pointer goes to the position 2. Here is pseudo code of how it works:
+```c
+int memory[1][3]; // initialize
+int pointer=0; // initialize
+int copy_value; // initialize
+pointer++; // >
+pointer++; // >
+memory[0][pointer] = pointer; // @
+copy_value = memory[0][pointer]; // |
+pointer--; // <
+pointer--; // <
+memory[0][pointer] = copy_value; // |
+pointer = memory[0][pointer]; // ~
+```
+
+---
+
+### Input And Output
+
+The `.` command would print the value of the pointer to the console. The `,` command would set the value of the pointer to the input number from the console. The `c` command if put before a `.` or a `,` would change the value to a character. `c.` would print the ASCII value of the pointer value, while `c,` would recieve a character and turn it into the ASCII value of that character. For example `1'1:+++++++[+++++++]-------[+]c.`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+```c
+int memory[1][1]; // initialize
+int loop_count;
+memory[0][0] += 7; // +++++++
+loop_count = memory[0][0]; // [
+while(loop_count != 0) { // [
+    memory[0][0] += 7; // +++++++
+    loop_count--; // ]
+} // ]
+memory[0][0] -= 7; // -------
+loop_count = memory[0][0]; // [
+while(loop_count != 0) { // [
+    memory[0][0]+=1; // +
+    loop_count--; // ]
+} // ]
+printchar(memory[0][0]);
+```
+
 
