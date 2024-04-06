@@ -94,7 +94,7 @@ void interpret(string content) {
                 case '[':
                 // begin loop
                     loopstartpos = i;
-                    loopcount = dat[scope][pointer]-1;
+                    loopcount = std::abs(dat[scope][pointer])-1;
                     break;
                 case ']':
                 // end loop
