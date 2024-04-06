@@ -157,23 +157,27 @@ pointer = memory[0][pointer]; // ~
 
 ### Input And Output
 
-The `.` command would print the value of the pointer to the console. The `,` command would set the value of the pointer to the input number from the console. The `c` command if put before a `.` or a `,` would change the value to a character. `c.` would print the ASCII value of the pointer value, while `c,` would recieve a character and turn it into the ASCII value of that character. For example `1'1:+++++++[+++++++]-------[+]c.`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+The `.` command would print the value of the pointer to the console. The `,` command would set the value of the pointer to the input number from the console. The `c` command if put before a `.` or a `,` would change the value to a character. `c.` would print the ASCII value of the pointer value, while `c,` would recieve a character and turn it into the ASCII value of that character. For example: `1'1:,c.`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
-int loop_count;
-memory[0][0] += 7; // +++++++
-loop_count = memory[0][0]; // [
-while(loop_count != 0) { // [
-    memory[0][0] += 7; // +++++++
-    loop_count--; // ]
-} // ]
-memory[0][0] -= 7; // -------
-loop_count = memory[0][0]; // [
-while(loop_count != 0) { // [
-    memory[0][0]+=1; // +
-    loop_count--; // ]
-} // ]
-printchar(memory[0][0]);
+memory[0][0] = getline(int); // ,
+printchar(memory[0][0]); // c.
 ```
 
+An example for input is: `1'1:c,.`. this would get the input character and save it to the pointer value, then it would print the ASCII code of the pointer position. Here is pseudo code of how it works:
+```c
+int memory[1][1]; // initialize
+memory[0][0] = getline(char); // c,
+printint(memory[0][0]); // .
+```
 
+---
+
+## Examples
+
+1:
+
+```brainfuck
+6'2:+++[+++].
+```
+output: `12`
