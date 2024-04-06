@@ -38,6 +38,8 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 
 > - the pointer starts at 0 which is the very left of the memory array
 
+> - scope size is how many scopes will be the maximum amount of scopes that are nested in each other: `( - 1 scope (2 - scopes (3 - scopes)))`
+
 ---
 
 ## Syntax
