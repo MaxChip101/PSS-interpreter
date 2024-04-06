@@ -93,7 +93,7 @@ int loop_count; // initialize
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
 memory[0][0]+=1; // +
-loop_count = memory[0][0]; // [
+loop_count = abs(memory[0][0]); // [
 while(loop_count != 0) { // [
     memory[0][0]+=1; // +
     memory[0][0]+=1; // +
@@ -177,9 +177,15 @@ printint(memory[0][0]); // .
 
 ## Examples
 
-1:
-
+1)
 ```brainfuck
 6'2:+++[+++].
 ```
 output: `12`
+
+2:
+```brainfuck
+6'2:c,++c.
+```
+input: `a`
+output: `c`
