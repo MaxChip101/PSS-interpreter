@@ -177,13 +177,13 @@ printint(memory[0][0]); // .
 
 ## Examples
 
-1)
+### 1
 ```brainfuck
 6'2:+++[+++].
 ```
 output: `12`
 
-2:
+### 2
 ```brainfuck
 6'2:c,++c.
 ```
