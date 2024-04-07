@@ -1,6 +1,6 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>,.c|()[]`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>,.c|()[]@~`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides `c` in some cases will be ignored as comments.
 
 ---
