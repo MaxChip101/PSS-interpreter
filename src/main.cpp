@@ -18,7 +18,7 @@ void interpret(string content) {
     unsigned int scope_size = 2;
     string temp;
     bool sizefound = true;
-    int **dat = nullptr;
+    int **data_array = nullptr;
     unsigned int pointer = 0;
     unsigned int scope = 0;
     unsigned int loopcount;
@@ -38,13 +38,13 @@ void interpret(string content) {
                 // get scope size
                 sizefound = false;
                 scope_size = stoi(temp);
-                dat = new int*[scope_size];
+                data_array = new int*[scope_size];
                 for (int row = 0; row < scope_size; ++row) {
-                    dat[row] = new int[data_size];
+                    data_array[row] = new int[data_size];
                 }
                 for (int row = 0; row < scope_size; ++row) {
                     for (int col = 0; col < data_size; ++col) {
-                        dat[row][col] = 0;
+                        data_array[row][col] = 0;
                     }
                 }
             }
@@ -54,9 +54,9 @@ void interpret(string content) {
                 case '.':
                 // print
                     if(content[i-1] == 'c') {
-                        cout << char(dat[scope][pointer]);
+                        cout << char(data_array[scope][pointer]);
                     } else {
-                        cout << dat[scope][pointer];
+                        cout << data_array[scope][pointer];
                     }
                     break;
                 case ',':
@@ -64,11 +64,11 @@ void interpret(string content) {
                     if(content[i-1] == 'c') {
                         char c;
                         cin >> c;
-                        dat[scope][pointer] = c;
+                        data_array[scope][pointer] = c;
                     } else {
                         int n;
                         cin >> n;
-                        dat[scope][pointer] = n;
+                        data_array[scope][pointer] = n;
                     }
                         break;
                 case '<':
@@ -85,16 +85,16 @@ void interpret(string content) {
                     break;
                 case '+':
                 // increase value
-                    dat[scope][pointer]++;
+                    data_array[scope][pointer]++;
                     break;
                 case '-':
                 // decrease value
-                    dat[scope][pointer]--;
+                    data_array[scope][pointer]--;
                     break;
                 case '[':
                 // begin loop
                     loopstartpos = i;
-                    loopcount = abs(dat[scope][pointer])-1;
+                    loopcount = abs(data_array[scope][pointer])-1;
                     break;
                 case ']':
                 // end loop
@@ -103,40 +103,40 @@ void interpret(string content) {
                         loopcount--;
                     }
                     break;
-                case '@':
+                case '~':
                 // get pointer position
-                    dat[scope][pointer] = pointer;
+                    data_array[scope][pointer] = pointer;
                     break;
                 case '(':
                 // begin scope
                     scope++;
-                    dat[scope] = dat[scope-1];
+                    data_array[scope] = data_array[scope-1];
                     break;
                 case ')':
                 // end scope
                     if(scope > 0) { 
                         scope--;
-                        dat[scope+1] = nullptr;
+                        data_array[scope+1] = nullptr;
                     }
                     break;
                 case '|':
                 // copy paste
                     if(copy) {
-                        dat[scope][pointer] = copy_value;
+                        data_array[scope][pointer] = copy_value;
                         copy = false;
                     } else {
-                        copy_value = dat[scope][pointer];
+                        copy_value = data_array[scope][pointer];
                         copy = true;
                     }
                     break;
-                case '~':
+                case '@':
                 // go to position
-                    pointer = dat[scope][pointer];
+                    pointer = data_array[scope][pointer];
                     break;
             }
         }
     }
-    delete[] dat;
+    delete[] data_array;
 }
 
 
