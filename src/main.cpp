@@ -140,7 +140,7 @@ void interpret(string content) {
 
 
 
-int main(int argc, char **argv) // does not work on windows (boowop)
+int main(int argc, char **argv)
 {
     string content;
 
