@@ -1,6 +1,6 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>,.c|()[]@~`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>,.c|()[]@~%`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides `c` in some cases will be ignored as comments.
 
 ---
@@ -23,7 +23,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 : , = sets the value of where the pointer is to the user input
 : . = prints the value of where the pointer is
 : c = changes the input or print type to a character
-
+: % = waits the value of the pointer milliseconds
 ```
 
 ---
@@ -177,7 +177,7 @@ printint(memory[0][0]); // .
 
 ### Sleep
 
-The `%` command would sleep for the value of the pointer miliseconds. An example for this would be `1'1:++++++++++[++++++++++]--------------------[++++++++++]++++++++++%.`. This would wait 1000 miliseconds or 1 second before printing the value of the pointer. Here is the pseudo code of how it works:
+The `%` command would sleep for the value of the pointer milliseconds. An example for this would be `1'1:++++++++++[++++++++++]--------------------[++++++++++]++++++++++%.`. This would wait 1000 milliseconds or 1 second before printing the value of the pointer. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] += 1000; // +
