@@ -136,7 +136,6 @@ void interpret(string content) {
             }
         }
     }
-    delete[] data_array;
 }
 
 
