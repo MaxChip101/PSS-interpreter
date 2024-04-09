@@ -5,7 +5,7 @@
 #ifdef __linux__
     #include <unistd.h>
 #elif _WIN32
-    #include <windows.h>
+    #include <filesystem>
 #endif
 
 
@@ -163,11 +163,8 @@ int main(int argc, char **argv) // does not work on windows (boowop)
         string argument = argv[1];
         
         // Get current working directory
-        char buffer[MAX_PATH];
-        GetCurrentDirectoryA(MAX_PATH, buffer);
-        string cwd(buffer);
-        
-        string fullcwd = cwd + "\\" + argument;
+        filesystem::path cwd = filesystem::absolute(filesystem::path(__FILE__)).parent_path().parent_path();
+        string fullcwd = cwd.string() + "\\" + argument;
 
         // Open file
         ifstream pssfile(fullcwd.c_str());
