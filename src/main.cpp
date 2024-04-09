@@ -140,6 +140,7 @@ void interpret(string content) {
                 case '%':
                 // sleep miliseconds
                     this_thread::sleep_for(chrono::milliseconds(data_array[scope][pointer]));
+                    break;
             }
         }
     }
