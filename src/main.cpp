@@ -1,11 +1,15 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <thread>
+#include <chrono>
+
 
 #ifdef __linux__
     #include <unistd.h>
 #elif _WIN32
     #include <filesystem>
+    #include <windows.h>
 #endif
 
 
@@ -133,6 +137,9 @@ void interpret(string content) {
                 // go to position
                     pointer = data_array[scope][pointer];
                     break;
+                case '%':
+                // sleep miliseconds
+                    this_thread::sleep_for(chrono::milliseconds(data_array[scope][pointer]));
             }
         }
     }
