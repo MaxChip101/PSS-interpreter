@@ -175,6 +175,18 @@ printint(memory[0][0]); // .
 
 ---
 
+### Sleep
+
+The `%` command would sleep for the value of the pointer miliseconds. An example for this would be `1'1:++++++++++[++++++++++]--------------------[++++++++++]++++++++++%.`. This would wait 1000 miliseconds or 1 second before printing the value of the pointer. Here is the pseudo code of how it works:
+```c
+int memory[1][1]; // initialize
+memory[0][0] += 1000; // +
+sleep(memory[0][0]); // %
+printint(memory[0][0]); // .
+```
+
+---
+
 ## Examples
 
 ### 1
