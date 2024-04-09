@@ -103,7 +103,7 @@ void interpret(string content) {
                         loopcount--;
                     }
                     break;
-                case '~':
+                case '@':
                 // get pointer position
                     data_array[scope][pointer] = pointer;
                     break;
@@ -129,7 +129,7 @@ void interpret(string content) {
                         copy = true;
                     }
                     break;
-                case '@':
+                case '~':
                 // go to position
                     pointer = data_array[scope][pointer];
                     break;
