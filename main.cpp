@@ -175,7 +175,7 @@ int main(int argc, char **argv)
         string argument = argv[1];
         
         // Get current working directory
-        filesystem::path cwd = filesystem::absolute(filesystem::path(__FILE__)).parent_path().parent_path();
+        filesystem::path cwd = filesystem::absolute(filesystem::path(__FILE__)).parent_path();
         string fullcwd = cwd.string() + "\\" + argument;
 
         // Open file
