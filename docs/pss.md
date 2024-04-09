@@ -23,7 +23,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 : , = sets the value of where the pointer is to the user input
 : . = prints the value of where the pointer is
 : c = changes the input or print type to a character
-: % = waits the value of the pointer milliseconds
+: % = sleeps for the value of the pointer milliseconds
 ```
 
 ---
