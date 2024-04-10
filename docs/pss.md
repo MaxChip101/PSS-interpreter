@@ -156,7 +156,7 @@ pointer = memory[0][pointer]; // ~
 
 ### Input And Output
 
-The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The `c` command if put before a `!` or a `?` would change the value to a character. `c!` would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1'1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The `c` prefix if put before a `!` or a `?` would change the value to a character. `c!` would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1'1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] = getline(int); // ?
@@ -184,16 +184,20 @@ printint(memory[0][0]); // !
 
 ---
 
+### Files
+
+In progress...
+
 ## Examples
 
 ### 1
-```brainfuck
+```pss
 6'2:+++[+++]!
 ```
 output: `12`
 
 ### 2
-```brainfuck
+```pss
 6'2:c?++c!
 ```
 input: `a`
