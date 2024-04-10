@@ -1,6 +1,6 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>,.c|()[]@~%`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]@~;`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides `c` in some cases will be ignored as comments.
 
 ---
@@ -9,21 +9,20 @@ pss is similar to brainfuck in it's syntax but has a couple more functions built
 
 The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}'{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 12 functions which are:
 ```brainfuck
-: + = increases the number of where the pointer is by 1
-: - = decreases the number of where the pointer is by 1
-: < = moves the pointer to the left of the array by 1
-: > = moves the pointer to the right of the array by 1
-: [ = begins a loop
-: ] = ends a loop
-: ( = begins a scope
-: ) = ends a scope
-: @ = sets the value of where the pointer is to the position of the pointer
-: ~ = goes to the position that the pointer value is equal to
-: | = copies the value of where the pointer is and pastes it where it is told
-: , = sets the value of where the pointer is to the user input
-: . = prints the value of where the pointer is
-: c = changes the input or print type to a character
-: % = sleeps for the value of the pointer milliseconds
+ +          increases the number of where the pointer is by 1
+ -          decreases the number of where the pointer is by 1
+ <          moves the pointer to the left of the array by 1
+ >          moves the pointer to the right of the array by 1
+ [          begins a loop
+ ]          ends a loop
+ (          begins a scope
+ )          ends a scope
+ @          sets the value of where the pointer is to the position of the pointer
+ ~          goes to the position that the pointer value is equal to
+ _          copies the value of where the pointer is and pastes it where it is told
+ ?          sets the value of where the pointer is to the user input
+ !          prints the value of where the pointer is
+ ;          sleeps for the value of the pointer milliseconds
 ```
 
 ---
@@ -32,9 +31,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 
 > - loops cannot be nested in each other
 
-> - `c` goes before a `,` or `.` to function
-
-> - `|` is structered like `|{code}|`
+> - `c` goes before a `?` or `!` to function
 
 > - the pointer starts at 0 which is the very left of the memory array
 
@@ -123,7 +120,7 @@ memory[scope+1] = null; // )
 ---
 
 ### Copy And Paste
-The `|` command would get the value of the pointer position on the memory array and would copy it then anything in between the 2 `|` would act as directions to tell the interpreter where to paste the value. Here is an example: `3'1:+++|>>|`. This code would add 3 to position 0 and would copy it and paste it to the position 2. Here is pseudo code of how it works:
+The `_` command would get the value of the pointer position on the memory array and would copy it then anything in between the 2 `_` would act as directions to tell the interpreter where to paste the value. Here is an example: `3'1:+++_>>_`. This code would add 3 to position 0 and would copy it and paste it to the position 2. Here is pseudo code of how it works:
 ```c
 int memory[1][3]; // initialize
 int pointer=0; // initialize
@@ -131,16 +128,16 @@ int copy_value; // initialize
 memory[0][pointer]+=1; // +
 memory[0][pointer]+=1; // +
 memory[0][pointer]+=1; // +
-copy_value = memory[0][pointer]; // |
+copy_value = memory[0][pointer]; // _
 pointer++; // >
 pointer++; // >
-memory[0][pointer] = copy_value; // |
+memory[0][pointer] = copy_value; // _
 ```
 
 ---
 
 ### Pointer Setting
-The `@` command sets the value of the pointer to the pointer position. The `~` command sets the position of the pointer to the value of the pointer. For example: `3'1:>>@|<<|~`. What is happening in this script is that the pointer goes right by 2 positions, and gets the pointer position and then copies it back 2 positions and then the pointer goes to the position 2. Here is pseudo code of how it works:
+The `@` command sets the value of the pointer to the pointer position. The `~` command sets the position of the pointer to the value of the pointer. For example: `3'1:>>@_<<_~`. What is happening in this script is that the pointer goes right by 2 positions, and gets the pointer position and then copies it back 2 positions and then the pointer goes to the position 2. Here is pseudo code of how it works:
 ```c
 int memory[1][3]; // initialize
 int pointer=0; // initialize
@@ -148,10 +145,10 @@ int copy_value; // initialize
 pointer++; // >
 pointer++; // >
 memory[0][pointer] = pointer; // @
-copy_value = memory[0][pointer]; // |
+copy_value = memory[0][pointer]; // _
 pointer--; // <
 pointer--; // <
-memory[0][pointer] = copy_value; // |
+memory[0][pointer] = copy_value; // _
 pointer = memory[0][pointer]; // ~
 ```
 
@@ -159,30 +156,30 @@ pointer = memory[0][pointer]; // ~
 
 ### Input And Output
 
-The `.` command would print the value of the pointer to the console. The `,` command would set the value of the pointer to the input number from the console. The `c` command if put before a `.` or a `,` would change the value to a character. `c.` would print the ASCII value of the pointer value, while `c,` would recieve a character and turn it into the ASCII value of that character. For example: `1'1:,c.`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The `c` command if put before a `!` or a `?` would change the value to a character. `c!` would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1'1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
-memory[0][0] = getline(int); // ,
-printchar(memory[0][0]); // c.
+memory[0][0] = getline(int); // ?
+printchar(memory[0][0]); // c!
 ```
 
-An example for input is: `1'1:c,.`. this would get the input character and save it to the pointer value, then it would print the ASCII code of the pointer position. Here is pseudo code of how it works:
+An example for input is: `1'1:c?!`. this would get the input character and save it to the pointer value, then it would print the ASCII code of the pointer position. Here is pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
-memory[0][0] = getline(char); // c,
-printint(memory[0][0]); // .
+memory[0][0] = getline(char); // c?
+printint(memory[0][0]); // !
 ```
 
 ---
 
 ### Sleep
 
-The `%` command would sleep for the value of the pointer milliseconds. An example for this would be `1'1:++++++++++[++++++++++]--------------------[++++++++++]++++++++++%.`. This would wait 1000 milliseconds or 1 second before printing the value of the pointer. Here is the pseudo code of how it works:
+The `;` command would sleep for the value of the pointer milliseconds. An example for this would be `1'1:++++++++++[++++++++++]--------------------[++++++++++]++++++++++;!`. This would wait 1000 milliseconds or 1 second before printing the value of the pointer. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] += 1000; // +
-sleep(memory[0][0]); // %
-printint(memory[0][0]); // .
+sleep(memory[0][0]); // ;
+printint(memory[0][0]); // !
 ```
 
 ---
@@ -191,13 +188,13 @@ printint(memory[0][0]); // .
 
 ### 1
 ```brainfuck
-6'2:+++[+++].
+6'2:+++[+++]!
 ```
 output: `12`
 
 ### 2
 ```brainfuck
-6'2:c,++c.
+6'2:c?++c!
 ```
 input: `a`
 output: `c`
