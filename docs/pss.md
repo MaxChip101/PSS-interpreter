@@ -9,20 +9,20 @@ pss is similar to brainfuck in it's syntax but has a couple more functions built
 
 The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}'{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 14 functions which are:
 ```brainfuck
- +          increases the number of where the pointer is by 1
- -          decreases the number of where the pointer is by 1
- <          moves the pointer to the left of the array by 1
- >          moves the pointer to the right of the array by 1
- [          begins a loop
- ]          ends a loop
- (          begins a scope
- )          ends a scope
- @          sets the value of where the pointer is to the position of the pointer
- ~          goes to the position that the pointer value is equal to
- _          copies the value of where the pointer is and pastes it where it is told
- ?          sets the value of where the pointer is to the user input
- !          prints the value of where the pointer is
- ;          sleeps for the value of the pointer milliseconds
+ +     increases the number of where the pointer is by 1
+ -     decreases the number of where the pointer is by 1
+ <     moves the pointer to the left of the array by 1
+ >     moves the pointer to the right of the array by 1
+ [     begins a loop
+ ]     ends a loop
+ (     begins a scope
+ )     ends a scope
+ @     sets the value of where the pointer is to the position of the pointer
+ ~     goes to the position that the pointer value is equal to
+ _     copies the value of where the pointer is and pastes it where it is told
+ ?     sets the value of where the pointer is to the user input
+ !     prints the value of where the pointer is
+ ;     sleeps for the value of the pointer milliseconds
 ```
 
 ---
