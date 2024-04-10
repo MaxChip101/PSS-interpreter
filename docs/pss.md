@@ -7,7 +7,7 @@ pss is similar to brainfuck in it's syntax but has a couple more functions built
 
 ## Basics
 
-The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}'{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 12 functions which are:
+The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}'{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 14 functions which are:
 ```brainfuck
  +          increases the number of where the pointer is by 1
  -          decreases the number of where the pointer is by 1
