@@ -55,7 +55,7 @@ void interpret(string content) {
             temp += content[i];
         } else {
             switch(content[i]) {
-                case '.':
+                case '!':
                 // print
                     if(content[i-1] == 'c') {
                         cout << char(data_array[scope][pointer]);
@@ -63,7 +63,7 @@ void interpret(string content) {
                         cout << data_array[scope][pointer];
                     }
                     break;
-                case ',':
+                case '?':
                 // input
                     if(content[i-1] == 'c') {
                         char c;
@@ -123,7 +123,7 @@ void interpret(string content) {
                         data_array[scope+1] = nullptr;
                     }
                     break;
-                case '|':
+                case '_':
                 // copy paste
                     if(copy) {
                         data_array[scope][pointer] = copy_value;
@@ -137,13 +137,33 @@ void interpret(string content) {
                 // go to position
                     pointer = data_array[scope][pointer];
                     break;
-                case '%':
+                case ';':
                 // sleep miliseconds
                     this_thread::sleep_for(chrono::milliseconds(data_array[scope][pointer]));
                     break;
-                case '#':
+                case '$':
                 // file
-                
+
+                    if(content[i-1] == 'w') {
+                        #ifdef __linux__
+                            // linux file support
+                        #elif _WIN32
+                            // windows fle support
+                        #endif
+                    } else if(content[i-1] == 'r') {
+                        #ifdef __linux__
+                            // linux file support
+                        #elif _WIN32
+                            // windows fle support
+                        #endif
+                    } else {
+                        #ifdef __linux__
+                            // linux file support
+                        #elif _WIN32
+                            // windows fle support
+                        #endif
+                    }
+
                     break;
             }
         }
