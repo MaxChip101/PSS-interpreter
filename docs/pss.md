@@ -23,7 +23,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
  _     copies the value of where the pointer is and pastes it where it is told
  ?     sets the value of where the pointer is to the user input
  !     prints the value of where the pointer is
- ;     sleeps for the value of the pointer milliseconds
+ ;     sleeps for the a set amount of milliseconds
  $     makes, writes, and reads files
 ```
 
