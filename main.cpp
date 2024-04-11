@@ -46,10 +46,9 @@ void interpret(string content) {
                 for (int row = 0; row < scope_size; ++row) {
                     data_array[row] = new int[data_size];
                 }
-                for (int row = 0; row < scope_size; ++row) {
-                    for (int col = 0; col < data_size; ++col) {
-                        data_array[row][col] = 0;
-                    }
+                // initialize
+                for (int pos = 0; pos < data_size; ++pos) {
+                        data_array[0][pos] = 0;
                 }
             }
             temp += content[i];
@@ -134,7 +133,7 @@ void interpret(string content) {
                     data_array[scope][pointer] = pointer;
                     break;
                 case '*':
-                // get value from position
+                // get value
                     data_array[scope][pointer] = data_array[scope][data_array[scope][pointer]];
                     break;
                 case '~':
@@ -150,18 +149,21 @@ void interpret(string content) {
                 // file
                     
                     if(content[i-1] == 'w') {
+                        // write file
                         #ifdef __linux__
                             // linux file support
                         #elif _WIN32
                             // windows fle support
                         #endif
                     } else if(content[i-1] == 'r') {
+                        // read file
                         #ifdef __linux__
                             // linux file support
                         #elif _WIN32
                             // windows fle support
                         #endif
                     } else {
+                        // create file
                         #ifdef __linux__
                             // linux file support
                         #elif _WIN32
@@ -177,45 +179,46 @@ void interpret(string content) {
 
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
+    
+    string fullcwd;
     string content;
 
     #ifdef __linux__
         char cwd[1024];
-
         string argument = argv[1];
+
+        // get current working directory
         string tmpcwd = getcwd(cwd, sizeof(cwd));
-        string fullcwd = tmpcwd + "/" + argument;
-
-        ifstream pssfile(fullcwd.c_str());
-        if (!pssfile.is_open()) {
-            cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
-            return 1;
-        }
-        // TODO: read every line in the pss file
-        getline(pssfile, content);
-
+        fullcwd = tmpcwd + "/" + argument;
     #elif _WIN32
         string argument = argv[1];
-        
+
         // Get current working directory
         filesystem::path cwd = filesystem::absolute(filesystem::path(__FILE__)).parent_path();
-        string fullcwd = cwd.string() + "\\" + argument;
-
-        // Open file
-        ifstream pssfile(fullcwd.c_str());
-        if (!pssfile.is_open()) {
-            cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
-            return 1;
-        }
-        // TODO: read every line in the pss file
-        getline(pssfile, content);
+        fullcwd = cwd.string() + "\\" + argument;
     #else
         cout << "Not certain of platform" << endl;
         return(1);
     #endif
 
+    // Open file
+    ifstream pssfile(fullcwd.c_str());
+
+    if (!pssfile.is_open()) {
+        cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
+        return 1;
+    }
+
+    // get file lines
+    string str;
+
+    while(getline(pssfile, str)) {
+        content += str;
+        content.push_back('\n');
+    }
+
+    // interpret the content
     interpret(content);
     return 0;
 }
