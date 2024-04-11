@@ -33,7 +33,7 @@ void interpret(string content) {
     for(int i = 0; i < content.size(); i++) {
         if (sizefound) {
             // get data size
-            if (content[i] == '\'') {
+            if (content[i] == '^') {
                 data_size = stoi(temp);
                 i++;
                 temp = "";
@@ -107,10 +107,6 @@ void interpret(string content) {
                         loopcount--;
                     }
                     break;
-                case '@':
-                // get pointer position
-                    data_array[scope][pointer] = pointer;
-                    break;
                 case '(':
                 // begin scope
                     scope++;
@@ -133,17 +129,26 @@ void interpret(string content) {
                         copy = true;
                     }
                     break;
+                case '&':
+                // get pointer position
+                    data_array[scope][pointer] = pointer;
+                    break;
+                case '*':
+                // get value
+                    data_array[scope][pointer] = data_array[scope][data_array[scope][pointer]];
+                    break;
                 case '~':
                 // go to position
                     pointer = data_array[scope][pointer];
                     break;
+
                 case ';':
                 // sleep miliseconds
                     this_thread::sleep_for(chrono::milliseconds(data_array[scope][pointer]));
                     break;
                 case '$':
                 // file
-
+                    
                     if(content[i-1] == 'w') {
                         #ifdef __linux__
                             // linux file support
@@ -188,7 +193,7 @@ int main(int argc, char **argv)
             cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
             return 1;
         }
-
+        // TODO: read every line in the pss file
         getline(pssfile, content);
 
     #elif _WIN32
@@ -204,7 +209,7 @@ int main(int argc, char **argv)
             cerr << "Error: File '" << fullcwd << "' does not exist." << endl;
             return 1;
         }
-
+        // TODO: read every line in the pss file
         getline(pssfile, content);
     #else
         cout << "Not certain of platform" << endl;
