@@ -134,7 +134,7 @@ void interpret(string content) {
                     data_array[scope][pointer] = pointer;
                     break;
                 case '*':
-                // get value
+                // get value from position
                     data_array[scope][pointer] = data_array[scope][data_array[scope][pointer]];
                     break;
                 case '~':
