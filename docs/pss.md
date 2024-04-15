@@ -1,6 +1,6 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides prefix characters in some cases will be ignored as comments.
 
 ---
@@ -9,6 +9,7 @@ pss is similar to brainfuck in it's syntax but has a couple more functions built
 
 The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 15 functions which are:
 ```pss
+ @     comments code in a sandwich
  +     increases the number of where the pointer is by 1
  -     decreases the number of where the pointer is by 1
  <     moves the pointer to the left of the array by 1
@@ -36,6 +37,8 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 > - the pointer starts at 0 which is the very left of the memory array
 
 > - scope size is how many scopes will be the maximum amount of scopes that are nested in each other: `( - 1 scope (2 - scopes (3 - scopes)))`
+
+> - comments have to be sandwiched like `@ comment @`
 
 ---
 
@@ -83,19 +86,21 @@ memory[0][pointer]-=1; // -
 ---
 
 ### Loops
-The `[` command starts a loop at the character position and it would loop back the value of the pointer that was there before the loop began. The `]` command would tell the interpreter to loop back to the position of the beginning of the loop and would subract 1 from the loop count. For example: `1^1:+++[+++]`. This would add 3 to position 0 and would loop 3 times adding 3 to position 0. Here is the code in pseudo code:
+The `[` command starts a loop at the character position and it would loop back the value of the pointer that was there before the loop began. The `]` command would tell the interpreter to loop back to the position of the beginning of the loop. For example: `2^1:+++[>++<-]`. This would add 3 to position 0 and would loop 3 times adding 2 to position 1 and position 0 having a value of 0. Here is the code in pseudo code:
 ```c
-int memory[1][1]; // initialize
-int loop_count; // initialize
-memory[0][0]+=1; // +
-memory[0][0]+=1; // +
-memory[0][0]+=1; // +
-loop_count = abs(memory[0][0]); // [
-while(loop_count != 0) { // [
-    memory[0][0]+=1; // +
-    memory[0][0]+=1; // +
-    memory[0][0]+=1; // +
-    loop_count--; // ]
+int memory[1][2]; // initialize
+int pointer; // initialize
+int loop_position;
+memory[0][pointer]+=1; // +
+memory[0][pointer]+=1; // +
+memory[0][pointer]+=1; // +
+loop_position = pointer;
+while(memory[0][loop_position] != 0) { // [
+    scope++; // >
+    memory[0][pointer]+=1; // +
+    memory[0][pointer]+=1; // +
+    scope--; // <
+    memory[0][pointer]-=1; // -
 } // ]
 ```
 
