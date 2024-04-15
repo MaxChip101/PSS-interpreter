@@ -226,7 +226,7 @@ output: `22`
 
 ### 2 - ASCII character offset
 ```pss
-6^2:c?++c!
+1^1:c?++c!
 ```
 input: `a`
 output: `c`
