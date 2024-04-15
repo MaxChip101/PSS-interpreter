@@ -59,11 +59,7 @@ void interpret(string content) {
             switch(content[i]) {
                 case '@':
                 // comment
-                    if(commented) {
-                        commented = false;
-                    } else {
-                        commented = true;
-                    } 
+                    commented = !commented;
                     break;
                 case '!':
                 // print
@@ -163,11 +159,10 @@ void interpret(string content) {
                 if(!commented) {
                     if(copy) {
                         data_array[scope][pointer] = copy_value;
-                        copy = false;
                     } else {
                         copy_value = data_array[scope][pointer];
-                        copy = true;
                     }
+                    copy = !copy;
                 }
                     break;
                 case '&':
