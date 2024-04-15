@@ -9,7 +9,7 @@ pss is similar to brainfuck in it's syntax but has a couple more functions built
 
 The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 15 functions which are:
 ```pss
- @     comments code in a sandwich
+ @     comment
  +     increases the number of where the pointer is by 1
  -     decreases the number of where the pointer is by 1
  <     moves the pointer to the left of the array by 1
@@ -164,7 +164,7 @@ memory[0][pointer] = memory[0][memory[0][pointer]]; // *
 
 ### Input And Output
 
-The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The `c` prefix if put before a `!` or a `?` would change the value to a character. `c!` would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1^1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The prefixs for printing is `c, n, s`. `c` turn the output valure into a char. `n` creates a new line. `s` creates a white space. for input, the only prefix is `c` which would turn the input type into a character. Prefixs are put before a command like `c!` which would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1^1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] = getline(int); // ?
@@ -198,13 +198,27 @@ In progress...
 
 ## Examples
 
-### 1
+### 1 - Adding calculator
 ```pss
-6^2:+++[+++]!
+256^6:
++++++++++++++++++++++++++++++++++++++++++++ @ 43 plus + @
+>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ @ 58 colon : @
+>
++!<c!>>s!? @ input 1 @
+<<<c!n!>>> @ print plus @
+>
+<<+!<c!>>>s!? @ input 2 @
+[
+    <+>- @ addition @
+]
+<! @ output @
 ```
-output: `12`
+input 1: `10`
+input 2: `12`
+output: `22`
 
-### 2
+### 2 - ASCII character offset
 ```pss
 6^2:c?++c!
 ```
