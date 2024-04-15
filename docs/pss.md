@@ -52,6 +52,12 @@ The structure of the code is pretty simple. How you strucure the code is depende
 
 ---
 
+### Comments
+The `@` command would initiate a comment that would make the interpreter ignore any syntax inside the comment. The comment could be ended by placing another `@` command.
+This is similar to `/**/` kind of comment system in C. Here is an example: `1^1: @ Hello, World! @` this would not do anything since the the only syntax which is a `!` is within a comment that would make it not be read by the interpreter.
+
+---
+
 ### Value Manipulation
 The `+` command adds 1 to the memory address that the pointer is at. Similarly, the `-` command subtracts 1 from a memory address that the pointer is at. For example you have a array position with the value of 2 and you subract 2 to make it equal to 0: `1^1:++--`. This would add 2 to the array but after would subract 1 two times, making it equal to 0. The pseudo code equivelent to this would be:
 ```c
