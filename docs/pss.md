@@ -32,7 +32,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
 
 ### Some rules for the syntax:
 
-> - loops cannot be nested in each other
+> - loops can be nested in each other
 
 > - the pointer starts at 0 which is the very left of the memory array
 
