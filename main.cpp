@@ -29,9 +29,9 @@ void interpret(string content) {
     unsigned int loopcount;
     stack<unsigned int> loopstack;
     stack<unsigned int> loopvalue;
-    unsigned int loopstartpos;
     int copy_value;
     bool copy = false;
+    bool commented = false;
 
     for(int i = 0; i < content.size(); i++) {
         if (sizefound) {
@@ -57,16 +57,31 @@ void interpret(string content) {
             temp += content[i];
         } else {
             switch(content[i]) {
+                case '@':
+                // comment
+                    if(commented) {
+                        commented = false;
+                    } else {
+                        commented = true;
+                    } 
+                    break;
                 case '!':
                 // print
+                if(!commented) {
                     if(content[i-1] == 'c') {
                         cout << char(data_array[scope][pointer]);
+                    } else if(content[i-1] == 'n') {
+                        cout << "\n";
+                    } else if(content[i-1] == 's') {
+                        cout << " ";
                     } else {
                         cout << data_array[scope][pointer];
                     }
+                }
                     break;
                 case '?':
                 // input
+                if(!commented) {
                     if(content[i-1] == 'c') {
                         char c;
                         cin >> c;
@@ -76,35 +91,46 @@ void interpret(string content) {
                         cin >> n;
                         data_array[scope][pointer] = n;
                     }
+                }
                         break;
                 case '<':
                 // move pointer left
+                if(!commented) {
                     if(pointer >= 0){
                         pointer--;
                     }
+                }
                     break;
                 case '>':
                 // move pointer right
+                if(!commented) {
                     if(pointer <= data_size - 1) {
                         pointer++;
                     }
+                }
                     break;
                 case '+':
                 // increase value
+                if(!commented) {
                     data_array[scope][pointer]++;
+                }
                     break;
                 case '-':
                 // decrease value
+                if(!commented) {
                     data_array[scope][pointer]--;
+                }
                     break;
                 case '[':
                 // begin loop
+                if(!commented) {
                     loopstack.push(i);
                     loopvalue.push(pointer);
-                    loopstartpos = i;
+                }
                     break;
                 case ']':
                 // end loop
+                if(!commented) {
                     if(data_array[scope][loopvalue.top()] == 0) {
                         loopstack.pop();
                         loopvalue.pop();
@@ -114,21 +140,27 @@ void interpret(string content) {
                         loopvalue.pop();
                         loopvalue.push(temp);
                     }
+                }
                     break;
                 case '(':
                 // begin scope
+                if(!commented) {
                     scope++;
                     data_array[scope] = data_array[scope-1];
+                }
                     break;
                 case ')':
                 // end scope
+                 if(!commented) {
                     if(scope > 0) { 
                         scope--;
                         data_array[scope+1] = nullptr;
                     }
+                }
                     break;
                 case '_':
                 // copy paste
+                if(!commented) {
                     if(copy) {
                         data_array[scope][pointer] = copy_value;
                         copy = false;
@@ -136,27 +168,36 @@ void interpret(string content) {
                         copy_value = data_array[scope][pointer];
                         copy = true;
                     }
+                }
                     break;
                 case '&':
                 // get pointer position
+                if(!commented) {
                     data_array[scope][pointer] = pointer;
+                }
                     break;
                 case '*':
                 // get value
+                if(!commented) {
                     data_array[scope][pointer] = data_array[scope][data_array[scope][pointer]];
+                }
                     break;
                 case '~':
                 // go to position
+                if(!commented) {
                     pointer = data_array[scope][pointer];
+                }
                     break;
 
                 case ';':
                 // sleep miliseconds
+                if(!commented) {
                     this_thread::sleep_for(chrono::milliseconds(data_array[scope][pointer]));
+                }
                     break;
                 case '$':
                 // file
-                    
+                if(!commented) {    
                     if(content[i-1] == 'w') {
                         // write file
                         #ifdef __linux__
@@ -179,7 +220,7 @@ void interpret(string content) {
                             // windows fle support
                         #endif
                     }
-
+                }
                     break;
             }
         }
