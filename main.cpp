@@ -3,6 +3,7 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
+#include <stack>
 
 
 #ifdef __linux__
@@ -26,6 +27,8 @@ void interpret(string content) {
     unsigned int pointer = 0;
     unsigned int scope = 0;
     unsigned int loopcount;
+    stack<unsigned int> loopstack;
+    stack<unsigned int> loopvalue;
     unsigned int loopstartpos;
     int copy_value;
     bool copy = false;
@@ -96,14 +99,20 @@ void interpret(string content) {
                     break;
                 case '[':
                 // begin loop
+                    loopstack.push(i);
+                    loopvalue.push(pointer);
                     loopstartpos = i;
-                    loopcount = abs(data_array[scope][pointer])-1;
                     break;
                 case ']':
                 // end loop
-                    if(loopcount != 0) {
-                        i = loopstartpos;
-                        loopcount--;
+                    if(data_array[scope][loopvalue.top()] == 0) {
+                        loopstack.pop();
+                        loopvalue.pop();
+                    } else {
+                        i = loopstack.top();
+                        unsigned int temp = loopvalue.top();
+                        loopvalue.pop();
+                        loopvalue.push(temp);
                     }
                     break;
                 case '(':
@@ -180,7 +189,7 @@ void interpret(string content) {
 
 
 int main(int argc, char **argv) {
-    
+
     string fullcwd;
     string content;
 
