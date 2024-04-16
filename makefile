@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra
 
 # Source files
-SRCS = ./src/main.cpp
+SRCS = ./main.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
