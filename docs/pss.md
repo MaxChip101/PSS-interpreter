@@ -190,18 +190,3 @@ printint(memory[0][0]); // !
 ### Files
 
 In progress...
-
-## Examples
-
-### 1
-```pss
-6^2:+++[+++]!
-```
-output: `12`
-
-### 2
-```pss
-6^2:c?++c!
-```
-input: `a`
-output: `c`
