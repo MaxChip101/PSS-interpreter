@@ -190,3 +190,16 @@ printint(memory[0][0]); // !
 ### Files
 
 In progress...
+
+---
+
+## Errors
+
+Errors in pss can be caused by faults in code. Errors you may encounter are:
+```
+ Error code 1: file input error
+ Error code 2:
+
+
+```
+you can enable
