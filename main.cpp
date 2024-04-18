@@ -20,11 +20,17 @@ string script;
 
 bool verbose = false;
 
-void error(string exception, int char_pos, string context, bool verbose) {
+void error(string exception, int char_pos, string content, bool verbose) {
     if(verbose) {
-        cerr << " \033[31m \033[4m" + context + "\033[0m \033[0m" << "\n";
+        for(int i = 0; i < content.size(); i++) {
+            if(i == char_pos) {
+                cerr << "\033[41m" << content[i]  << "\033[0m";
+            } else {
+                cerr << "\033[31m" << content[i] << "\033[0m";
+            }
+        }
         
-        cerr << "\033[31m" << exception + ". CHAR: " + to_string(char_pos) << "\033[0m" << "\n";
+        cerr << "\033[31m" << exception + ". CHAR: " + to_string(char_pos) + ", \'" + content[char_pos] + "\'" << "\033[0m" << "\n";
     } else {
         cerr << "\033[31m" << exception << "\033[0m" << "\n";
     }
@@ -45,6 +51,7 @@ void interpret(string content) {
     int copy_value;
     bool copy = false;
     bool commented = false;
+    unsigned int i_check = 0;
     string context;
 
     for(int i = 0; i < content.size(); i++) {
@@ -70,7 +77,12 @@ void interpret(string content) {
             }
             temp += content[i];
         } else {
-            context += content[i];
+
+            if (i_check < i) {
+                context += content[i];
+                i_check = i;
+            }
+            
             switch(content[i]) {
                 case '@':
                 // comment
@@ -110,7 +122,7 @@ void interpret(string content) {
                     if(pointer >= 0){
                         pointer--;
                     } else {
-                        error("Error 2: cannot go to memory position: " + to_string(pointer), i, context, verbose);
+                        error("Error 2: cannot go to memory position: " + to_string(pointer), i, content, verbose);
                         return;
                     }
                 }
@@ -121,7 +133,7 @@ void interpret(string content) {
                     if(pointer <= data_size - 1) {
                         pointer++;
                     } else {
-                        error("Error 2: cannot go to memory position: " + to_string(pointer), i, context, verbose);
+                        error("Error 2: cannot go to memory position: " + to_string(pointer), i, content, verbose);
                         return;
                     }
                 }
@@ -167,7 +179,7 @@ void interpret(string content) {
                         data_array[scope] = data_array[scope-1];
                     } else {
                         cout << verbose << "\n";
-                        error("Error code 3: cannot go to scope instance: " + to_string(scope), i, context, verbose);
+                        error("Error code 3: cannot go to scope instance: " + to_string(scope), i, content, verbose);
                         return;
                     }
                 }
@@ -179,7 +191,7 @@ void interpret(string content) {
                         scope--;
                         data_array[scope+1] = nullptr;
                     } else {
-                        error("Error code 3: cannot end scope", i, context, verbose);
+                        error("Error code 3: cannot end scope", i, content, verbose);
                         return;
                     }
                 }
@@ -207,7 +219,7 @@ void interpret(string content) {
                     if(data_array[scope][pointer] <= data_size || data_array[scope][pointer] >= 0) {
                         data_array[scope][pointer] = data_array[scope][data_array[scope][pointer]];
                     } else {
-                        error("Error code 4: cannot get value of memory position: " + to_string(data_array[scope][pointer]), i, context, verbose);
+                        error("Error code 4: cannot get value of memory position: " + to_string(data_array[scope][pointer]), i, content, verbose);
                         return;
                     }
                 }
@@ -218,7 +230,7 @@ void interpret(string content) {
                     if(data_array[scope][pointer] <= data_size || data_array[scope][pointer] >= 0) {
                         pointer = data_array[scope][pointer];
                     } else {
-                        error("Error code 2: cannot go to memory position: " + to_string(data_array[scope][pointer]), i, context, verbose);
+                        error("Error code 2: cannot go to memory position: " + to_string(data_array[scope][pointer]), i, content, verbose);
                         return;
                     }
                 }
@@ -309,7 +321,6 @@ int main(int argc, char **argv) {
     }
 
     for(int i = 2; i < argc; i++) {
-        cout << argv[i] << "\n";
         if(strcmp(argv[i], "-v") || strcmp(argv[i], "-verbose")) {
             verbose = true;
         }
