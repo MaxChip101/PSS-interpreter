@@ -198,8 +198,17 @@ In progress...
 Errors in pss can be caused by faults in code. Errors you may encounter are:
 ```
  Error code 1: file input error
- Error code 2:
-
-
+ Error code 2: pointer error
+ Error code 3: scope error
+ Error code 4: value error
 ```
-you can enable
+you can enable verbose in the interpreter by providing the `-v` or `verbose` flag after specifying the script file.
+
+--
+
+## Flags
+
+In PSS you can have flags to customize how PSS runs and interprets your script. Here are the list of flags:
+```
+ -v / -verbose : signal's the interpereter to turn on verbose mode
+```
