@@ -51,8 +51,6 @@ void interpret(string content) {
     int copy_value;
     bool copy = false;
     bool commented = false;
-    unsigned int i_check = 0;
-    string context;
 
     for(int i = 0; i < content.size(); i++) {
         if (sizefound) {
@@ -77,11 +75,6 @@ void interpret(string content) {
             }
             temp += content[i];
         } else {
-
-            if (i_check < i) {
-                context += content[i];
-                i_check = i;
-            }
             
             switch(content[i]) {
                 case '@':
