@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <stack>
-
+#include <bitset>
 
 #ifdef __linux__
     #include <unistd.h>
@@ -17,6 +17,8 @@
 using namespace std;
 
 string script;
+
+string complete_cwd;
 
 bool verbose = false;
 
@@ -51,8 +53,8 @@ void interpret(string content) {
     int copy_value;
     bool copy = false;
     bool commented = false;
-    unsigned int i_check = 0;
-    string context;
+    bool in_file = false;
+    string file;
 
     for(int i = 0; i < content.size(); i++) {
         if (sizefound) {
@@ -77,11 +79,6 @@ void interpret(string content) {
             }
             temp += content[i];
         } else {
-
-            if (i_check < i) {
-                context += content[i];
-                i_check = i;
-            }
             
             switch(content[i]) {
                 case '@':
@@ -89,30 +86,78 @@ void interpret(string content) {
                     commented = !commented;
                     break;
                 case '!':
-                // print
+                // write
                 if(!commented) {
-                    if(content[i-1] == 'c') {
-                        cout << char(data_array[scope][pointer]);
-                    } else if(content[i-1] == 'n') {
-                        cout << "\n";
-                    } else if(content[i-1] == 's') {
-                        cout << " ";
+                    if(in_file) {
+                        if(content[i-1] == 'c') {
+                            fstream clear_file;
+                            clear_file.open(complete_cwd + file + ".bin", ofstream::out | ios::trunc);
+                            clear_file.close();
+                        } else {
+                        // write file
+                            fstream write_file;
+                            write_file.open(complete_cwd + file + ".bin", ios_base::app);
+                            bitset<8> byte(data_array[scope][pointer]);
+                            write_file << byte;
+                            write_file.close();
+                        }
                     } else {
-                        cout << data_array[scope][pointer];
+                        // printing
+                        if(content[i-1] == 'c') {
+                            cout << char(data_array[scope][pointer]);
+                        } else if(content[i-1] == 'n') {
+                            cout << "\n";
+                        } else if(content[i-1] == 's') {
+                            cout << " ";
+                        } else {
+                            cout << data_array[scope][pointer];
+                        }
                     }
                 }
                     break;
                 case '?':
-                // input
+                // read
                 if(!commented) {
-                    if(content[i-1] == 'c') {
-                        char c;
-                        cin >> c;
-                        data_array[scope][pointer] = c;
+                    if(in_file) {
+                    // read file
+                        ifstream read_file;
+                        read_file.open(complete_cwd + file + ".bin");
+
+                        // reading file
+                        string str;
+                        string file_content;
+
+                        while(getline(read_file, str)) {
+                            file_content += str;
+                            file_content.push_back('\n');
+                        }
+                        // writing char pos
+                        string selected_byte(8, '0');
+                        for (int c = 0; c < 8; c++) {
+                            
+                            if(file_content[data_array[scope][pointer] * 8 + c] == '1' || file_content[data_array[scope][pointer] * 8 + c] == '0') {
+                                selected_byte[c] = file_content[data_array[scope][pointer] * 8 + c];
+                            } else {
+                                error("Error 5: cannot read or get byte: " + to_string(data_array[scope][pointer]), i, content, verbose);
+                                return;
+                            }
+                        }
+                        cout << selected_byte << "\n";
+                        int value = std::bitset<8>(selected_byte).to_ulong();
+                        
+                        data_array[scope][pointer] = value;
+                        read_file.close();
                     } else {
-                        int n;
-                        cin >> n;
-                        data_array[scope][pointer] = n;
+                        // input
+                        if(content[i-1] == 'c') {
+                            char c;
+                            cin >> c;
+                            data_array[scope][pointer] = c;
+                        } else {
+                            int n;
+                            cin >> n;
+                            data_array[scope][pointer] = n;
+                        }
                     }
                 }
                         break;
@@ -178,7 +223,6 @@ void interpret(string content) {
                         scope++;
                         data_array[scope] = data_array[scope-1];
                     } else {
-                        cout << verbose << "\n";
                         error("Error code 3: cannot go to scope instance: " + to_string(scope), i, content, verbose);
                         return;
                     }
@@ -245,27 +289,19 @@ void interpret(string content) {
                 case '$':
                 // file
                 if(!commented) {    
-                    if(content[i-1] == 'w') {
-                        // write file
-                        #ifdef __linux__
-                            // linux file support
-                        #elif _WIN32
-                            // windows fle support
-                        #endif
-                    } else if(content[i-1] == 'r') {
-                        // read file
-                        #ifdef __linux__
-                            // linux file support
-                        #elif _WIN32
-                            // windows fle support
-                        #endif
+                    if(in_file) {
+                        // ends file
+                        in_file = false;
+                        file = "";
                     } else {
-                        // create file
-                        #ifdef __linux__
-                            // linux file support
-                        #elif _WIN32
-                            // windows fle support
-                        #endif
+                        // gets file name
+                        in_file = true;
+                        if(content[i-1] == 'c') {
+                            file = char(data_array[scope][pointer]);
+                        } else {
+                            file = to_string(data_array[scope][pointer]);
+                        }
+                        data_array[scope][pointer] = 0;
                     }
                 }
                     break;
@@ -303,6 +339,8 @@ int main(int argc, char **argv) {
         cout << "Not certain of platform" << endl;
         return(1);
     #endif
+
+    complete_cwd = cwd.string() + "\\";
 
     // Open file
     ifstream pssfile(fullcwd.c_str());
