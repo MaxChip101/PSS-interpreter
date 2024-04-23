@@ -25,7 +25,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
  ?     sets the value of where the pointer is to the user input
  !     prints the value of where the pointer is
  ;     sleeps for the a set amount of milliseconds
- $     makes, writes, and reads files
+ $     makes a file
 ```
 
 ---
@@ -200,7 +200,22 @@ printint(memory[0][0]); // !
 
 ### Files
 
-In progress...
+The `$` command would create a file depending on what the value of the pointer is and if a `c` is a prefix to it, then it would turn the file name from a number to an ASCII character. The `$` command is a sandwich command which means that anything inside of it would be done to the file. When inside of the file, the `!` and `?` commands change to write and read the file. The `!` command would change to write a byte to the file and if a `c` is a prefix to it, then it would clear the file. The `?` command would read the file and it would read the byte index that the value of the pointer is saying to read. To keep in mind, when you create a file it would set the pointer value to 0. Another thing to keep in mind is that the file type is a `.bin` file type and would read and write bytes. An example is: `1^1: +++++$!+++++!-----?$!`. This would create a file named `5.bin` and would write the binary form of 5 then print the number 5 in the terminal. The pseudo code for this is: 
+```c
+int memory[1][1]; // initialize
+memory[0][0] += 5; // +++++
+initialize_file(memory[0][0]); // $
+memory[0][0] = 0; // $
+write(memory[0][0]); // !
+memory[0][0] += 5; // +++++
+write(memory[0][0]); // !
+memory[0][0] -= 5; // -----
+memory[0][0] = read_file(memory[0][0]); // ?
+close_file(); // $
+printint(memory[0][0]); // !
+```
+
+---
 
 ## Examples
 
