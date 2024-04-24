@@ -89,6 +89,9 @@ void interpret(string content) {
                 // end
                     return;
                     break;
+                case ',':
+                // jump
+                    i += data_array[scope][pointer];
                 case '!':
                 // write
                 if(!commented) {
