@@ -232,7 +232,7 @@ printint(memory[0][0]); // !
 
 ### Jumping to Positions
 
-In pss if you put a `,` it would tell the interpreter to jump foward by the value of the pointer amount in the script which can only be ran once unless `l` is a prefix to it. For example: `1^1:+++++,!++++!`. This would get the value 5 and jump 5 characters in the script to the `!` and would print 5 and not 9. Here is the code in pseudo code:
+In pss if you put a `,` it would tell the interpreter to jump foward by the value of the pointer amount in the script. For example: `1^1:+++++,!++++!`. This would get the value 5 and jump 5 characters in the script to the `!` and would print 5 and not 9. Here is the code in pseudo code:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] += 5; // +++++
