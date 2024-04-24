@@ -85,6 +85,10 @@ void interpret(string content) {
                 // comment
                     commented = !commented;
                     break;
+                case '.':
+                // end
+                    return;
+                    break;
                 case '!':
                 // write
                 if(!commented) {
