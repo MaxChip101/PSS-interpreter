@@ -150,7 +150,7 @@ void interpret(string content) {
                             }
                         }
                         cout << selected_byte << "\n";
-                        int value = std::bitset<8>(selected_byte).to_ulong();
+                        int value = bitset<8>(selected_byte).to_ulong();
                         
                         data_array[scope][pointer] = value;
                         read_file.close();
