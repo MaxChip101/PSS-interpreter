@@ -1,14 +1,15 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@$`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides prefix characters in some cases will be ignored as comments.
 
 ---
 
 ## Basics
 
-The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 15 functions which are:
+The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 17 functions which are:
 ```pss
+ @     comment
  +     increases the number of where the pointer is by 1
  -     decreases the number of where the pointer is by 1
  <     moves the pointer to the left of the array by 1
@@ -24,18 +25,20 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
  ?     sets the value of where the pointer is to the user input
  !     prints the value of where the pointer is
  ;     sleeps for the a set amount of milliseconds
- $     makes, writes, and reads files
+ $     makes a file
 ```
 
 ---
 
 ### Some rules for the syntax:
 
-> - loops cannot be nested in each other
+> - loops can be nested in each other
 
 > - the pointer starts at 0 which is the very left of the memory array
 
 > - scope size is how many scopes will be the maximum amount of scopes that are nested in each other: `( - 1 scope (2 - scopes (3 - scopes)))`
+
+> - comments have to be sandwiched like `@ comment @`
 
 ---
 
@@ -46,6 +49,12 @@ This section is going to describe how to use the syntax in pss and how it works
 ### Structure
 
 The structure of the code is pretty simple. How you strucure the code is dependent on how big of an array and how many scopes your script needs. You would strucure your code like this: `{array_size}^{scope_count}:`. For example if you take 16 memory slots and have 2 scopes in use then you would strucure the code like this `16^2:`. The single quotation mark seperates the size of your array from your scope size, the colon ends the preset and any character after the colon is seen as code.
+
+---
+
+### Comments
+The `@` command would initiate a comment that would make the interpreter ignore any syntax inside the comment. The comment could be ended by placing another `@` command.
+This is similar to `/**/` kind of comment system in C. Here is an example: `1^1: @ Hello, World! @` this would not do anything since the the only syntax which is a `!` is within a comment that would make it not be read by the interpreter.
 
 ---
 
@@ -83,19 +92,21 @@ memory[0][pointer]-=1; // -
 ---
 
 ### Loops
-The `[` command starts a loop at the character position and it would loop back the value of the pointer that was there before the loop began. The `]` command would tell the interpreter to loop back to the position of the beginning of the loop and would subract 1 from the loop count. For example: `1^1:+++[+++]`. This would add 3 to position 0 and would loop 3 times adding 3 to position 0. Here is the code in pseudo code:
+The `[` command starts a loop at the character position and it would loop back the value of the pointer that was there before the loop began. The `]` command would tell the interpreter to loop back to the position of the beginning of the loop. For example: `2^1:+++[>++<-]`. This would add 3 to position 0 and would loop 3 times adding 2 to position 1 and position 0 having a value of 0. Here is the code in pseudo code:
 ```c
-int memory[1][1]; // initialize
-int loop_count; // initialize
-memory[0][0]+=1; // +
-memory[0][0]+=1; // +
-memory[0][0]+=1; // +
-loop_count = abs(memory[0][0]); // [
-while(loop_count != 0) { // [
-    memory[0][0]+=1; // +
-    memory[0][0]+=1; // +
-    memory[0][0]+=1; // +
-    loop_count--; // ]
+int memory[1][2]; // initialize
+int pointer; // initialize
+int loop_position;
+memory[0][pointer]+=1; // +
+memory[0][pointer]+=1; // +
+memory[0][pointer]+=1; // +
+loop_position = pointer;
+while(memory[0][loop_position] != 0) { // [
+    scope++; // >
+    memory[0][pointer]+=1; // +
+    memory[0][pointer]+=1; // +
+    scope--; // <
+    memory[0][pointer]-=1; // -
 } // ]
 ```
 
@@ -159,7 +170,7 @@ memory[0][pointer] = memory[0][memory[0][pointer]]; // *
 
 ### Input And Output
 
-The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The `c` prefix if put before a `!` or a `?` would change the value to a character. `c!` would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1^1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
+The `!` command would print the value of the pointer to the console. The `?` command would set the value of the pointer to the input number from the console. The prefixs for printing is `c, n, s`. `c` turn the output valure into a char. `n` creates a new line. `s` creates a white space. for input, the only prefix is `c` which would turn the input type into a character. Prefixs are put before a command like `c!` which would print the ASCII value of the pointer value, while `c?` would recieve a character and turn it into the ASCII value of that character. For example: `1^1:?c!`. This code gets the ASCII value of b which is 98 and prints the ASCII character of 98. Here is the pseudo code of how it works:
 ```c
 int memory[1][1]; // initialize
 memory[0][0] = getline(int); // ?
@@ -189,26 +200,48 @@ printint(memory[0][0]); // !
 
 ### Files
 
-In progress...
+The `$` command would create a file depending on what the value of the pointer is and if a `c` is a prefix to it, then it would turn the file name from a number to an ASCII character. The `$` command is a sandwich command which means that anything inside of it would be done to the file. When inside of the file, the `!` and `?` commands change to write and read the file. The `!` command would change to write a byte to the file and if a `c` is a prefix to it, then it would clear the file. The `?` command would read the file and it would read the byte index that the value of the pointer is saying to read. To keep in mind, when you create a file it would set the pointer value to 0. Another thing to keep in mind is that the file type is a `.bin` file type and would read and write bytes. An example is: `1^1: +++++$!+++++!-----?$!`. This would create a file named `5.bin` and would write the binary form of 5 then print the number 5 in the terminal. The pseudo code for this is: 
+```c
+int memory[1][1]; // initialize
+memory[0][0] += 5; // +++++
+initialize_file(memory[0][0]); // $
+memory[0][0] = 0; // $
+write(memory[0][0]); // !
+memory[0][0] += 5; // +++++
+write(memory[0][0]); // !
+memory[0][0] -= 5; // -----
+memory[0][0] = read_file(memory[0][0]); // ?
+close_file(); // $
+printint(memory[0][0]); // !
+```
 
 ---
 
-## Errors
+## Examples
 
-Errors in pss can be caused by faults in code. Errors you may encounter are:
+### 1 - Adding calculator
+```pss
+4^1:
++++++++++++++++++++++++++++++++++++++++++++ @ 43 plus + @
+>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ @ 58 colon : @
+>
++!<c!>>s!? @ input 1 @
+<<<c!n!>>> @ print plus @
+>
+<<+!<c!>>>s!? @ input 2 @
+[
+    <+>- @ addition @
+]
+<! @ output @
 ```
- Error code 1: file input error
- Error code 2: pointer error
- Error code 3: scope error
- Error code 4: value error
-```
-you can enable verbose in the interpreter by providing the `-v` or `verbose` flag after specifying the script file.
+input 1: `10`
+input 2: `12`
+output: `22`
 
---
-
-## Flags
-
-In PSS you can have flags to customize how PSS runs and interprets your script. Here are the list of flags:
+### 2 - ASCII character offset
+```pss
+1^1:c?++c!
 ```
- -v / -verbose : signal's the interpereter to turn on verbose mode
-```
+input: `a`
+output: `c`
