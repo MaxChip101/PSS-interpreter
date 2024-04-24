@@ -1,13 +1,13 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@$`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@$.`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides prefix characters in some cases will be ignored as comments.
 
 ---
 
 ## Basics
 
-The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 17 functions which are:
+The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 18 functions which are:
 ```pss
  @     comment
  +     increases the number of where the pointer is by 1
@@ -26,6 +26,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
  !     prints the value of where the pointer is
  ;     sleeps for the a set amount of milliseconds
  $     makes a file
+ .     ends the program
 ```
 
 ---
@@ -216,6 +217,37 @@ printint(memory[0][0]); // !
 ```
 
 ---
+
+### Ending Program
+
+In pss if you put a `.` it would end the program without having to reach the end of the file. An example is `1^1:+++++!.!` this would print 5 but not print the other 5 because the program ended before it reached the end of the file. Here is the example in pseudo code:
+```c
+int memory[1][1]; // initialize
+memory[0][0] += 5; // +++++
+printint(memory[0][0]); // !
+end(); // .
+printint(memory[0][0]); // !
+```
+
+
+### Jumping to Positions
+
+In pss if you put a `,` it would tell the interpreter to jump foward by the value of the pointer amount in the script which can only be ran once unless `l` is a prefix to it. For example: `1^1:+++++,!++++!`. This would get the value 5 and jump 5 characters in the script to the `!` and would print 5 and not 9. Here is the code in pseudo code:
+```c
+int memory[1][1]; // initialize
+memory[0][0] += 5; // +++++
+jump(memory[0][0]); // ,
+printint(memory[0][0]); // !
+memory[0][0] += 4; // ++++
+printint(memory[0][0]); // !
+```
+
+---
+
+### Condition Statements
+
+In progress...
+
 
 ## Examples
 
