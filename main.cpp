@@ -79,7 +79,6 @@ void interpret(string content) {
             }
             temp += content[i];
         } else {
-            
             switch(content[i]) {
                 case '@':
                 // comment
@@ -114,8 +113,6 @@ void interpret(string content) {
                             cout << char(data_array[scope][pointer]);
                         } else if(content[i-1] == 'n') {
                             cout << "\n";
-                        } else if(content[i-1] == 's') {
-                            cout << " ";
                         } else {
                             cout << data_array[scope][pointer];
                         }
@@ -151,7 +148,6 @@ void interpret(string content) {
                         }
                         cout << selected_byte << "\n";
                         int value = bitset<8>(selected_byte).to_ulong();
-                        
                         data_array[scope][pointer] = value;
                         read_file.close();
                     } else {
