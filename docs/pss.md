@@ -1,13 +1,13 @@
 ## Introduction
 
-Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@$.`
+Protocol Scope Script (pss) is a simplifiefd programming language with the syntax: `+-<>?!_()[]&*~;@$.,`
 pss is similar to brainfuck in it's syntax but has a couple more functions built into it. The interpreter works by iterating through the characters of the script, and reading what each character is. Every letter besides prefix characters in some cases will be ignored as comments.
 
 ---
 
 ## Basics
 
-The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 18 functions which are:
+The bascics behind pss is similar to brainfuck, which is memory manipulation. The memory in pss is an array with set bounds you create, you would start your script with: `{array_size}^{scope_count}:`. This would tell the interpreter how big your array should be. Pss has 19 functions which are:
 ```pss
  @     comment
  +     increases the number of where the pointer is by 1
@@ -27,6 +27,7 @@ The bascics behind pss is similar to brainfuck, which is memory manipulation. Th
  ;     sleeps for the a set amount of milliseconds
  $     makes a file
  .     ends the program
+ ,     jumps a set value of characters in a script
 ```
 
 ---
