@@ -1,17 +1,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <thread>
-#include <chrono>
 #include <stack>
 #include <bitset>
-
-#ifdef __linux__
-    #include <unistd.h>
-#elif _WIN32
-    #include <filesystem>
-    #include <windows.h>
-#endif
+#include <unistd.h>
 
 
 using namespace std;
@@ -286,7 +278,7 @@ void interpret(string content) {
                 case ';':
                 // sleep miliseconds
                 if(!commented) {
-                    this_thread::sleep_for(chrono::milliseconds(abs(data_array[scope][pointer])));
+                    usleep(abs(data_array[scope][pointer]));
                 }
                     break;
                 case '$':
@@ -318,7 +310,6 @@ void interpret(string content) {
 int main(int argc, char **argv) {
 
     string fullcwd;
-    string content;
 
     if(argc == 1) {
         error("Error code 1: no input file", 0, "", false);
@@ -332,18 +323,9 @@ int main(int argc, char **argv) {
         // get current working directory
         string tmpcwd = getcwd(cwd, sizeof(cwd));
         fullcwd = tmpcwd + "/" + argument;
-    #elif _WIN32
-        string argument = argv[1];
-
-        // Get current working directory
-        filesystem::path cwd = filesystem::absolute(filesystem::path(__FILE__)).parent_path();
-        fullcwd = cwd.string() + "\\" + argument;
-    #else
-        cout << "Not certain of platform" << endl;
-        return(1);
     #endif
 
-    complete_cwd = cwd.string() + "\\";
+    complete_cwd = tmpcwd + "/";
 
     // Open file
     ifstream pssfile(fullcwd.c_str());
@@ -354,15 +336,16 @@ int main(int argc, char **argv) {
     }
 
     // get file lines
-    string str;
+    string ln;
+    string content;
 
-    while(getline(pssfile, str)) {
-        content += str;
+    while(getline(pssfile, ln)) {
+        content += ln;
         content.push_back('\n');
     }
 
     for(int i = 2; i < argc; i++) {
-        if(strcmp(argv[i], "-v") || strcmp(argv[i], "-verbose")) {
+        if(argv[i] == "-v" || argv[i] == "-verbose") {
             verbose = true;
         }
     }
