@@ -15,9 +15,10 @@ string complete_cwd;
 bool verbose = false;
 
 void error(string exception, int char_pos, string content, bool verbose) {
+    string::size_type pos = char_pos;
     if(verbose) {
-        for(int i = 0; i < content.size(); i++) {
-            if(i == char_pos) {
+        for(string::size_type i = 0; i < content.size(); i++) {
+            if(i == pos) {
                 cerr << "\033[41m" << content[i]  << "\033[0m";
             } else {
                 cerr << "\033[31m" << content[i] << "\033[0m";
@@ -32,23 +33,22 @@ void error(string exception, int char_pos, string content, bool verbose) {
 
 
 void interpret(string content) {
-    unsigned int data_size;
-    unsigned int scope_size = 2;
+    int data_size;
+    int scope_size;
     string temp;
     bool sizefound = true;
     int **data_array = nullptr;
-    unsigned int pointer = 0;
-    unsigned int scope = 0;
-    unsigned int loopcount;
-    stack<unsigned int> loopstack;
-    stack<unsigned int> loopvalue;
+    int pointer = 0;
+    int scope = 0;
+    stack<int> loopstack;
+    stack<int> loopvalue;
     int copy_value;
     bool copy = false;
     bool commented = false;
     bool in_file = false;
     string file;
 
-    for(int i = 0; i < content.size(); i++) {
+    for(string::size_type i = 0; i < content.size(); i++) {
         if (sizefound) {
             // get data size
             if (content[i] == '^') {
@@ -278,7 +278,7 @@ void interpret(string content) {
                 case ';':
                 // sleep miliseconds
                 if(!commented) {
-                    usleep(abs(data_array[scope][pointer]));
+                    usleep(abs(data_array[scope][pointer]) * 1000);
                 }
                     break;
                 case '$':
@@ -316,14 +316,12 @@ int main(int argc, char **argv) {
         return 0;
     } 
 
-    #ifdef __linux__
-        char cwd[1024];
-        string argument = argv[1];
+    char cwd[1024];
+    string argument = argv[1];
 
-        // get current working directory
-        string tmpcwd = getcwd(cwd, sizeof(cwd));
-        fullcwd = tmpcwd + "/" + argument;
-    #endif
+    // get current working directory
+    string tmpcwd = getcwd(cwd, sizeof(cwd));
+    fullcwd = tmpcwd + "/" + argument;
 
     complete_cwd = tmpcwd + "/";
 
@@ -345,7 +343,8 @@ int main(int argc, char **argv) {
     }
 
     for(int i = 2; i < argc; i++) {
-        if(argv[i] == "-v" || argv[i] == "-verbose") {
+        string current_argument = argv[i];
+        if(current_argument.compare("-v") || current_argument.compare("-verbose")) {
             verbose = true;
         }
     }

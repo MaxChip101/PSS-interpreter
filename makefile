@@ -1,23 +1,30 @@
-# Define compiler
+# Compiler
 CXX = g++
 
-# Compiler flags
-CXXFLAGS = -std=c++11 -Wall -Wextra
+# Directories
+SRC_DIR = src
+BUILD_DIR = build
 
 # Source files
-SRCS = ./main.cpp
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+# Executable name
+EXEC = pss
 
-# Target executable
-TARGET = pss
+# Flags
+CXXFLAGS = -Wall -std=c++17
 
-# Default target
-all:
-	mkdir -p ./bin
-	$(CXX) $(SRCS) -o ./bin/$(TARGET)
+# Default rule
+all: $(BUILD_DIR)/$(EXEC)
 
-# Clean command to remove generated files
+# Compile all source files directly into the final executable
+$(BUILD_DIR)/$(EXEC): $(SOURCES)
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $(SOURCES) -o $@
+
+# Clean up the build directory
 clean:
-	rm -rf ./bin
+	rm -rf $(BUILD_DIR)/$(EXEC)
+
+# Make sure nothing else runs if the Makefile targets are up-to-date
+.PHONY: all clean
